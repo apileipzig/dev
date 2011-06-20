@@ -9,7 +9,8 @@
 # ONLY USE THIS FOR *LOCAL* DEVELOPMENT!
 #
 # Usage:
-#  - Install git, rvm and bundler
+#  - Install git, rvm with ruby 1.8.7,
+#    and bundler
 #  - Copy the script in the directory
 #    where you want to create the api
 #    folder
@@ -24,6 +25,9 @@ git clone git@github.com:apileipzig/api.git
 git clone git@github.com:apileipzig/panel.git
 git clone git@github.com:apileipzig/wiki.git
 
+echo "invoke rvm..."
+source `which rvm`
+rvm ruby-1.8.7
 
 echo "bundle everything..."
 cd api/
@@ -55,9 +59,8 @@ echo "generating dev files for the wiki..."
 cd wiki/
 cp config/database_example.yml config/database.yml
 cp db/dev_example_db db/development.sqlite3
-rake db:migrate
 cd ..
 cp -R css/ wiki/public/css
 cp -R js/ wiki/public/js
-cp -R images/* wiki/public/images/
+cp -R images/ wiki/public/images/
 
