@@ -9,12 +9,11 @@
 # ONLY USE THIS FOR *LOCAL* DEVELOPMENT!
 #
 # Usage:
-#  - Install git, rvm with ruby 1.8.7,
-#    and bundler
-#  - Copy the script in the directory
-#    where you want to create the api
-#    folder
-#  - run the script
+#  - Install git, rvm with ruby 1.8.7 and bundler
+#  - cd to a directory where you want to create the api folder
+#  - Run the script with the following command
+#  $ bash < <(curl -s https://raw.github.com/apileipzig/dev/master/setup_dev_env.sh)
+#  - If you don't have curl, download it from https://github.com/apileipzig/dev and run it manually
 #
 ########################################
 
@@ -26,8 +25,29 @@ git clone git@github.com:apileipzig/panel.git
 git clone git@github.com:apileipzig/wiki.git
 
 echo "invoke rvm..."
-source `which rvm`
-rvm ruby-1.8.7
+which rvm &>/dev/null
+if [ $? -eq 0 ]
+then
+  rvm ruby-1.8.7 &>/dev/null
+	if [ $? -eq 0 ]
+	then
+		rvm ruby-1.8.7
+	else
+		echo "Ruby 1.8.7 not found! Trying to install it with rvm..."
+		rvm install 1.8.7
+		rvm ruby-1.8.7
+	fi
+else
+	echo "RVM not found. Please install the Ruby Version Manager from here: http://rvm.beginrescueend.com/"
+	exit
+fi
+
+bundle -v &>/dev/null
+if [ $? -ne 0 ]
+then
+	echo "Bundler not found! Trying to install it..."
+	gem install bundler
+fi
 
 echo "bundle everything..."
 cd api/
