@@ -20,22 +20,34 @@
 echo "cloning all repositories..."
 git clone git@github.com:apileipzig/frontend.git api/
 cd api/
-git clone git@github.com:apileipzig/api.git
-git clone git@github.com:apileipzig/panel.git
-git clone git@github.com:apileipzig/wiki.git
+if [ ! -d api/ ]; then
+  git clone git@github.com:apileipzig/api.git
+else
+	echo "folder exists! skipping cloning api..."
+fi
+if [ ! -d panel/ ]; then
+  git clone git@github.com:apileipzig/panel.git
+else
+	echo "folder exists! skipping cloning panel..."
+fi
+if [ ! -d wiki/ ]; then
+  git clone git@github.com:apileipzig/wiki.git
+else
+	echo "folder exists! skipping cloning wiki..."
+fi
 
 echo "invoke rvm..."
 which rvm &>/dev/null
 if [ $? -eq 0 ]
 then
-  rvm ruby-1.8.7 &>/dev/null
+  rvm ree &>/dev/null
 	if [ $? -eq 0 ]
 	then
-		rvm ruby-1.8.7
+		rvm ree
 	else
-		echo "Ruby 1.8.7 not found! Trying to install it with rvm..."
-		rvm install 1.8.7
-		rvm ruby-1.8.7
+		echo "Ruby Enterprise Edition not found! Trying to install it with rvm..."
+		rvm install ree
+		rvm ree
 	fi
 else
 	echo "RVM not found. Please install the Ruby Version Manager from here: http://rvm.beginrescueend.com/"
@@ -60,10 +72,10 @@ cd ..
 
 echo "generating dev files for the api..."
 cd api/
-echo -e "adapter: sqlite3\ndatabase: db/development.sqlite3\npool: 5\ntimeout: 5000" > database.yml
-rake db:migrate
-rake db:seed
-rake permissions:init
+echo -e "development:\n  adapter: sqlite3\n  database: db/development.sqlite3\n  pool: 5\n  timeout: 5000" > database.yml
+bundle exec rake db:migrate
+bundle exec rake db:seed
+bundle exec rake permissions:init
 cd ..
 
 echo "generating dev files for the panel..."
@@ -77,8 +89,6 @@ cp -R images/* panel/public/images/
 
 echo "generating dev files for the wiki..."
 cd wiki/
-cp config/database_example.yml config/database.yml
-cp db/dev_example_db db/development.sqlite3
 cd ..
 cp -R css/ wiki/public/css
 cp -R js/ wiki/public/js
