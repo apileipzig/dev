@@ -76,6 +76,7 @@ echo -e "development:\n  adapter: sqlite3\n  database: db/development.sqlite3\n 
 bundle exec rake db:migrate
 bundle exec rake db:seed
 bundle exec rake permissions:init
+bundle exec rake permissions:add:all USER_NAME=admin@apileipzig.de
 cd ..
 
 echo "generating dev files for the panel..."
@@ -93,4 +94,3 @@ cd ..
 cp -R css/ wiki/public/css
 cp -R js/ wiki/public/js
 cp -R images/ wiki/public/images/
-
