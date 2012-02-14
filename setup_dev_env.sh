@@ -72,7 +72,7 @@ cd ..
 
 echo "generating dev files for the api..."
 cd api/
-echo -e "development:\n  adapter: sqlite3\n  database: db/development.sqlite3\n  pool: 5\n  timeout: 5000" > database.yml
+echo -e "development:\n  adapter: sqlite3\n  database: db/development.sqlite3\n  pool: 5\n  timeout: 5000\n\ntest:\n  adapter: sqlite3\n  database: db/test.sqlite3\n" > database.yml
 bundle exec rake db:migrate
 bundle exec rake db:seed
 bundle exec rake permissions:init
